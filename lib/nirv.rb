@@ -40,7 +40,7 @@ class NirvController < SimpleConsole::Controller
   def add 
     # allow basic add action - nirv add "task name" without having 
     # to speicify the name explicitly
-    params[:name] = params[:name]  || params[:id]
+    params[:name] = params[:name] || params[:id]
 
     if params[:name]
       
@@ -48,7 +48,7 @@ class NirvController < SimpleConsole::Controller
       # @q: anyone know better way to do this? still new to rb
       now = Time.now.to_i
       task = {}
-      [:name, :tags, :note ].each do | key |
+      [:name, :tags, :note].each do | key |
         begin 
           task[key] = params[key].gsub("'", "&rsquo;")
           task["_#{key}"] = now 
@@ -57,7 +57,7 @@ class NirvController < SimpleConsole::Controller
 
       #obviously, need to rethink this, and how we handle errors
       result = @nirvana.add task
-      @message = "Added task: #{params[:name]}"
+      @message = "#{result}"
       
     else 
       @message = "Missing name of task, which is the bare minimum. Try '#{@my_app_name} help'."
@@ -71,7 +71,7 @@ class NirvController < SimpleConsole::Controller
     if File.open(BACKUP_FILE, 'w').write(result.to_json)
       @message = "Your account data has been downloaded and saved to #{BACKUP_FILE}"
     end
-  rescue Exception => e:
+  rescue Exception => e
     @message = "There was a problem: #{e.to_s}"
   end
   
